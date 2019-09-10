@@ -2,12 +2,14 @@ package com.example.mapwithmarker;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.google.android.libraries.maps.CameraUpdateFactory;
 import com.google.android.libraries.maps.GoogleMap;
 import com.google.android.libraries.maps.OnMapReadyCallback;
 import com.google.android.libraries.maps.SupportMapFragment;
 import com.google.android.libraries.maps.model.LatLng;
+import com.google.android.libraries.maps.model.Marker;
 import com.google.android.libraries.maps.model.MarkerOptions;
 
 /**
@@ -41,9 +43,27 @@ public class MapsMarkerActivity extends AppCompatActivity
     public void onMapReady(GoogleMap googleMap) {
         // Add a marker in Sydney, Australia,
         // and move the map's camera to the same location.
-        LatLng sydney = new LatLng(-33.852, 151.211);
-        googleMap.addMarker(new MarkerOptions().position(sydney)
-                .title("Marker in Sydney"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng firstPosition = new LatLng(-33.852, 151.211);
+        LatLng secondPosition = new LatLng(-33.852, 156.211);
+
+        final Marker firstMarker = googleMap.addMarker(new MarkerOptions().position(firstPosition).zIndex(1));
+        final Marker secondMarker = googleMap.addMarker(new MarkerOptions().position(secondPosition).zIndex(1));
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(firstPosition));
+
+        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if(marker.equals(firstMarker)){
+                    Log.d("TAG", "on first marker clicked");
+                }
+
+                if(marker.equals(secondMarker)){
+                    Log.d("TAG", "on second marker clicked");
+                }
+
+                return false;
+            }
+        });
     }
 }
