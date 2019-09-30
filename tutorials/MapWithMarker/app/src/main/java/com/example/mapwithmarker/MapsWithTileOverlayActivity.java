@@ -2,18 +2,18 @@ package com.example.mapwithmarker;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
-import com.google.android.libraries.maps.CameraUpdateFactory;
 import com.google.android.libraries.maps.GoogleMap;
 import com.google.android.libraries.maps.OnMapReadyCallback;
 import com.google.android.libraries.maps.SupportMapFragment;
-import com.google.android.libraries.maps.model.LatLng;
-import com.google.android.libraries.maps.model.MarkerOptions;
+import com.google.android.libraries.maps.model.TileOverlay;
+import com.google.android.libraries.maps.model.TileOverlayOptions;
 
 /**
  * An activity that displays a Google map with a marker (pin) to indicate a particular location.
  */
-public class MapsMarkerActivity extends AppCompatActivity
+public class MapsWithTileOverlayActivity extends AppCompatActivity
         implements OnMapReadyCallback {
 
     @Override
@@ -39,11 +39,18 @@ public class MapsMarkerActivity extends AppCompatActivity
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        // Add a marker in Sydney, Australia,
-        // and move the map's camera to the same location.
-        LatLng sydney = new LatLng(-33.852, 151.211);
-        googleMap.addMarker(new MarkerOptions().position(sydney)
-                .title("Marker in Sydney"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        final DebugTileProvider debugTileProvider = new DebugTileProvider();
+        final TileOverlay tileOverlay = googleMap.addTileOverlay(new TileOverlayOptions().tileProvider(debugTileProvider));
+
+
+        findViewById(R.id.clear_tile_cache).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                debugTileProvider.i++;
+                tileOverlay.clearTileCache();
+            }
+        });
     }
+
+
 }
